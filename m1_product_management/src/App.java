@@ -16,6 +16,7 @@ public class App {
         System.out.print("Ingrese su opción: ");
         option = scanner.nextInt();
         scanner.nextLine();
+        System.out.println();
 
         switch (option) {
           case 1:
@@ -24,14 +25,25 @@ public class App {
           case 2:
             showProductInformation();
             break;
+          case 3:
+            showTotalValue();
+            break;
+          case 4:
+            showProductSummary();
+            break;
+          case 5:
+            clearProductData();
+            break;
+          case 0:
+            System.out.println("Saliendo del sistema.");
+            break;
           default:
+            System.out.println("Opción inválida. Por favor, seleccione una opción válida.");
             break;
         }
         
       } while (option != 0);
 
-
-      System.out.println("");
       scanner.close();
     }
 
@@ -46,6 +58,7 @@ public class App {
       4. Mostrar resumen completo del producto
       5. Limpiar datos del producto actual
       0. Salir
+
       """);
     }
 
@@ -80,11 +93,29 @@ public class App {
     }
 
     static void setDataProducto() {
-      System.out.print("Ingrese el nombre del producto: ");
-      productName = scanner.nextLine();
+      productName = requestProductName();
       productPrice = requestProductPrice();
       productStock = requestProductStock();
       scanner.nextLine();
+
+      System.out.println("Producto registrado correctamente");
+    }
+
+    static String requestProductName() {
+      String name;
+      boolean validName = false;
+
+      do {
+        System.out.print("Ingrese el nombre del producto: ");
+        name = scanner.nextLine();
+        validName = isValidName(name);
+
+        if (!validName) {
+          System.out.println("Nombre invalido. No debe estar vacio o contener solo espacios");
+        }
+      } while (!validName);
+
+      return name;
     }
 
     static double requestProductPrice() {
@@ -121,6 +152,10 @@ public class App {
       return stock;
     }
 
+    static boolean isValidName(String name) {
+      return !name.isBlank();
+    }
+
     static boolean isValidPrice(double price) {
       return price > 0;
     }
@@ -135,13 +170,72 @@ public class App {
       } else {
         System.out.printf("""
 
-        Información del producto registrado:
+        --- Información del producto registrado ---
 
         Nombre: %s
-        Precio: %s
+        Precio: $%.2f
         Cantidad en inventario: %s
             
             """, productName, productPrice, productStock);
       }
+    }
+
+    static void showTotalValue() {
+      if (emptyProduct()) {
+        showErrorMessageProductEmpty();
+      } else {
+        System.out.printf("Valor total en inventario: $%.2f%n", calculateTotalValue());
+      }
+    }
+
+    static void showProductSummary() {
+      if (emptyProduct()) {
+        showErrorMessageProductEmpty();
+      } else {
+        System.out.printf("""
+
+        --- Resumen Del Producto ---
+
+        Nombre: %s
+        Precio unitario: $%.2f
+        Cantidad en inventario: %s
+        Valor total en inventario: $%.2f
+        Estado del stock: %s
+          
+
+        """, productName, productPrice, productStock, calculateTotalValue(), getStatusProductStock());
+      }
+    }
+
+    static double calculateTotalValue() {
+      return productPrice * productStock;
+    }
+
+    static String getStatusProductStock() {
+      String statusStock = "Stock suficiente";
+
+      if (productStock < 5) {
+        statusStock = "Stock bajo";
+      } else if (productStock > 20) {
+        statusStock = "Stock alto";
+      }
+
+      return statusStock;
+    }
+
+    static void clearProductData() {
+      if (emptyProduct()) {
+        showErrorMessageProductEmpty();
+      } else {
+        productName = "";
+        productPrice = -1;
+        productStock = -1;
+
+        System.out.println("Los datos del producto actual han sido borrados exitosamente.");
+      }
+    }
+
+    static void showErrorMessageProductEmpty() {
+      System.out.println("No hay datos de producto registrados actualmente.");
     }
 }
