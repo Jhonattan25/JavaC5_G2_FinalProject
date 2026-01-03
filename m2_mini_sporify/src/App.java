@@ -34,10 +34,12 @@ public class App {
           playlistsManagement(sporifyAccount);
           break;
         case 4:
-          // showProductSummary();
+          songsManagement(sporifyAccount);
           break;
         case 5:
-          // clearProductData();
+          if (validateSession(sporifyAccount)) {
+            logOut(sporifyAccount);
+          }
           break;
         case 6:
           System.out.println("Saliendo del sistema.");
@@ -281,5 +283,74 @@ public class App {
       System.out.println();
       playlist.listSongs();
     }
+  }
+
+  public static void songsManagement(SporifyAccount sporifyAccount) {
+    int option = 0;
+    do {
+      showSubMenuSongs();
+
+      System.out.print("Ingrese su opción: ");
+      option = scanner.nextInt();
+      scanner.nextLine();
+      System.out.println();
+
+      switch (option) {
+        case 1:
+          if (validateSession(sporifyAccount)) {
+            playSongByPlaylist(sporifyAccount);
+          }
+          break;
+        case 2:
+          if (validateSession(sporifyAccount)) {
+            stopSongByPlaylist(sporifyAccount);
+          }
+          break;
+        case 3:
+          break;
+        default:
+          System.out.println("Opción inválida. Por favor, seleccione una opción válida.");
+          break;
+      }
+
+    } while (option != 3);
+  }
+
+  public static void showSubMenuSongs() {
+    System.out.println("""
+
+        === Reproducir canciones ===
+
+        1. Reproducir canción desde playlist
+        2. Detener reproducción desde playlist
+        3. Volver
+
+        """);
+  }
+
+  public static void playSongByPlaylist(SporifyAccount sporifyAccount) {
+    System.out.print("Ingrese el nombre de la playlist en la que esta la canción: ");
+    String playlistName = scanner.nextLine();
+
+    System.out.print("Ingrese el indice de la canción a reproducir: ");
+    int songIndex = scanner.nextInt();
+    scanner.nextLine();
+
+    sporifyAccount.playSong(playlistName, songIndex - 1);
+  }
+
+  public static void stopSongByPlaylist(SporifyAccount sporifyAccount) {
+    System.out.print("Ingrese el nombre de la playlist en la que esta la canción: ");
+    String playlistName = scanner.nextLine();
+
+    System.out.print("Ingrese el indice de la canción a detener: ");
+    int songIndex = scanner.nextInt();
+    scanner.nextLine();
+
+    sporifyAccount.stopSong(playlistName, songIndex - 1);
+  }
+
+  public static void logOut(SporifyAccount sporifyAccount) {
+    sporifyAccount.logOut();
   }
 }

@@ -97,6 +97,15 @@ public class SporifyAccount {
     }
   }
 
+  public void stopSong(String playlistName, int indexSong) {
+
+    Playlist playlist = searchPlaylistByName(playlistName);
+
+    if (playlist != null) {
+      playlist.stopSong(indexSong);
+    }
+  }
+
   public Playlist searchPlaylistByName(String playlistName) {
     for (int i = 0; i < playlistsCounter; i++) {
       if (playlistName.equalsIgnoreCase(playlists[i].getName())) {

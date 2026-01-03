@@ -41,6 +41,14 @@ public class Playlist {
     }
   }
 
+  public void stopSong(int index) {
+    if (index >= 0 && index < songsCounter) {
+      songs[index].stop();
+    } else {
+      System.out.println("Índice de canción inválido.");
+    }
+  }
+
   public boolean isFull() {
     return songsCounter >= songs.length;
   }

@@ -36,7 +36,7 @@ public class Song extends Multimedia implements Reproducible {
 
   @Override
   public void play() {
-    System.out.println("Produciendo la canción: " + getTitle() + " del artista: " + getArtist());
+    System.out.println("Reproduciendo la canción: " + getTitle() + " del artista: " + getArtist());
   }
 
   @Override
