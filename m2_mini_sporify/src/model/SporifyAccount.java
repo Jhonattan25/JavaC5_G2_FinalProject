@@ -8,13 +8,21 @@ public class SporifyAccount {
   private MusicLibrary musicLibrary;
   private boolean isSessionActive;
 
-  public SporifyAccount(String user, String password, int maxPlaylists, int maxSongs) {
+  public SporifyAccount(String user, String password, int maxPlaylists, MusicLibrary musicLibrary) {
     this.user = user;
     this.password = password;
     this.playlists = new Playlist[maxPlaylists];
     this.playlistsCounter = 0;
-    this.musicLibrary = new MusicLibrary(maxSongs);
+    this.musicLibrary = musicLibrary;
     this.isSessionActive = false;
+  }
+
+  public MusicLibrary getMusicLibrary() {
+    return musicLibrary;
+  }
+
+  public void setMusicLibrary(MusicLibrary musicLibrary) {
+    this.musicLibrary = musicLibrary;
   }
 
   public String getUser() {

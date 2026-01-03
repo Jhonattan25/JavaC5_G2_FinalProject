@@ -31,7 +31,7 @@ public class Playlist {
     System.out.println("Playlist: " + name);
 
     for (int i = 0; i < songs.length; i++) {
-      System.out.println(i + ". " + songs[i].getTitle() + " - " + songs[i].getArtist());
+      System.out.println((i + 1) + ". " + songs[i].getTitle() + " - " + songs[i].getArtist());
     }
   }
 

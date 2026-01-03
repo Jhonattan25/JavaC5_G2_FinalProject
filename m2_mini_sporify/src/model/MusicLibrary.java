@@ -28,10 +28,11 @@ public class MusicLibrary {
   }
 
   public void listCatalog() {
-    System.out.println("Catalogo");
+    System.out.println("=== Catalogo de canciones ===");
+    System.out.println();
 
-    for (int i = 0; i < songs.length; i++) {
-      System.out.println(i + ". " + songs[i].getTitle() + " - " + songs[i].getArtist());
+    for (int i = 0; i < songsCounter; i++) {
+      System.out.println((i + 1) + ". " + songs[i].getTitle() + " - " + songs[i].getArtist());
     }
   }
 }
