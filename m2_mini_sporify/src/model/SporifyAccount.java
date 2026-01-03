@@ -72,6 +72,12 @@ public class SporifyAccount {
     }
   }
 
+  public void listPlaylists() {
+    for (int i = 0; i < playlistsCounter; i++) {
+      System.out.println((i + 1) + ". " + playlists[i].getName());
+    }
+  }
+
   public void addSongToPlaylist(String playlistName, Song newSong) {
 
     Playlist playlist = searchPlaylistByName(playlistName);
@@ -80,7 +86,6 @@ public class SporifyAccount {
       playlist.addSong(newSong);
       System.out.println("Canción agregada a la playlist correctamente.");
     }
-    System.out.println("Playlist no encontrada.");
   }
 
   public void playSong(String playlistName, int indexSong) {
@@ -90,7 +95,6 @@ public class SporifyAccount {
     if (playlist != null) {
       playlist.playSong(indexSong);
     }
-    System.out.println("Playlist no encontrada.");
   }
 
   public Playlist searchPlaylistByName(String playlistName) {
@@ -99,6 +103,7 @@ public class SporifyAccount {
         return playlists[i];
       }
     }
+    System.out.println("Playlist no encontrada.");
     return null;
   }
 

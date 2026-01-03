@@ -1,6 +1,7 @@
 import java.util.Scanner;
 
 import model.MusicLibrary;
+import model.Playlist;
 import model.Song;
 import model.SporifyAccount;
 
@@ -30,7 +31,7 @@ public class App {
           musicLibraryManagement(sporifyAccount);
           break;
         case 3:
-          // showTotalValue();
+          playlistsManagement(sporifyAccount);
           break;
         case 4:
           // showProductSummary();
@@ -146,6 +147,8 @@ public class App {
   }
 
   public static void listSongsMusicLibrary(MusicLibrary musicLibrary) {
+    System.out.println("=== Catalogo de canciones ===");
+    System.out.println();
     musicLibrary.listCatalog();
   }
 
@@ -180,12 +183,103 @@ public class App {
     System.out.print("Ingrese el nombre de la canción a buscar: ");
     String name = scanner.nextLine();
 
-    Song foundSong = musicLibrary.searchSong(name);
+    Song foundSong = musicLibrary.searchSongByName(name);
 
     if (foundSong != null) {
       System.out.println(foundSong.getInfo());
-    } else {
-      System.out.println("Canción no encontrada en la biblioteca musical.");
+    }
+  }
+
+  public static void playlistsManagement(SporifyAccount sporifyAccount) {
+    int option = 0;
+    do {
+      showSubMenuPlaylists();
+
+      System.out.print("Ingrese su opción: ");
+      option = scanner.nextInt();
+      scanner.nextLine();
+      System.out.println();
+
+      switch (option) {
+        case 1:
+          if (validateSession(sporifyAccount)) {
+            createPlaylist(sporifyAccount);
+          }
+          break;
+        case 2:
+          listPlaylists(sporifyAccount);
+          break;
+        case 3:
+          if (validateSession(sporifyAccount)) {
+            addSongToPlaylist(sporifyAccount);
+          }
+          break;
+        case 4:
+          showSongsByPlaylist(sporifyAccount);
+        case 5:
+          break;
+        default:
+          System.out.println("Opción inválida. Por favor, seleccione una opción válida.");
+          break;
+      }
+
+    } while (option != 5);
+  }
+
+  public static void showSubMenuPlaylists() {
+    System.out.println("""
+
+        === Gestionar Listas De Reproducción ===
+
+        1. Crear playlist
+        2. Listar playlists
+        3. Agregar canción a playlist
+        4. Ver canciones
+        5. Volver
+
+        """);
+  }
+
+  public static void createPlaylist(SporifyAccount sporifyAccount) {
+
+    System.out.print("Ingrese el nombre de la playlist a crear: ");
+    String name = scanner.nextLine();
+
+    Playlist newPlaylist = new Playlist(name, 200);
+
+    sporifyAccount.addPlaylist(newPlaylist);
+  }
+
+  public static void listPlaylists(SporifyAccount sporifyAccount) {
+    System.out.println("=== Lista de playlists ===");
+    System.out.println();
+    sporifyAccount.listPlaylists();
+  }
+
+  public static void addSongToPlaylist(SporifyAccount sporifyAccount) {
+    System.out.print("Ingrese el nombre de la canción que va agregar: ");
+    String songName = scanner.nextLine();
+
+    Song song = sporifyAccount.getMusicLibrary().searchSongByName(songName);
+
+    if (song != null) {
+      System.out.print("Ingrese el nombre de la playlist en la que desea agregar la canción: ");
+      String playlistName = scanner.nextLine();
+
+      sporifyAccount.addSongToPlaylist(playlistName, song);
+    }
+  }
+
+  public static void showSongsByPlaylist(SporifyAccount sporifyAccount) {
+    System.out.print("Ingrese el nombre de la playlist a la que desea verle las canciones: ");
+    String playlistName = scanner.nextLine();
+
+    Playlist playlist = sporifyAccount.searchPlaylistByName(playlistName);
+
+    if (playlist != null) {
+      System.out.println("=== Canciones de las playlist " + playlistName + " ===");
+      System.out.println();
+      playlist.listSongs();
     }
   }
 }

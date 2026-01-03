@@ -28,9 +28,7 @@ public class Playlist {
   }
 
   public void listSongs() {
-    System.out.println("Playlist: " + name);
-
-    for (int i = 0; i < songs.length; i++) {
+    for (int i = 0; i < songsCounter; i++) {
       System.out.println((i + 1) + ". " + songs[i].getTitle() + " - " + songs[i].getArtist());
     }
   }

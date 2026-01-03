@@ -18,19 +18,17 @@ public class MusicLibrary {
     }
   }
 
-  public Song searchSong(String name) {
+  public Song searchSongByName(String name) {
     for (int i = 0; i < songsCounter; i++) {
       if (name.equalsIgnoreCase(songs[i].getTitle())) {
         return songs[i];
       }
     }
+    System.out.println("Canción no encontrada en la biblioteca musical.");
     return null;
   }
 
   public void listCatalog() {
-    System.out.println("=== Catalogo de canciones ===");
-    System.out.println();
-
     for (int i = 0; i < songsCounter; i++) {
       System.out.println((i + 1) + ". " + songs[i].getTitle() + " - " + songs[i].getArtist());
     }
