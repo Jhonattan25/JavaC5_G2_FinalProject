@@ -20,7 +20,7 @@ public class MusicLibrary {
 
   public Song searchSongByName(String name) {
     for (int i = 0; i < songsCounter; i++) {
-      if (name.equalsIgnoreCase(songs[i].getTitle())) {
+      if (name.equalsIgnoreCase(songs[i].getName())) {
         return songs[i];
       }
     }
@@ -30,7 +30,7 @@ public class MusicLibrary {
 
   public void listCatalog() {
     for (int i = 0; i < songsCounter; i++) {
-      System.out.println((i + 1) + ". " + songs[i].getTitle() + " - " + songs[i].getArtist());
+      System.out.println((i + 1) + ". " + songs[i].getName() + " - " + songs[i].getArtist());
     }
   }
 }

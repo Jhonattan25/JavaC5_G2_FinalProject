@@ -4,8 +4,8 @@ public class Song extends Multimedia implements Reproducible {
 
   private String artist;
 
-  public Song(String title, String artist, int durationSeconds) {
-    super(title, durationSeconds);
+  public Song(String name, String artist, int durationSeconds) {
+    super(name, durationSeconds);
     this.artist = artist;
   }
 
@@ -25,23 +25,23 @@ public class Song extends Multimedia implements Reproducible {
   @Override
   public String getInfo() {
     return String.format("""
-      
+
         === Información de la canción ===
 
-        Cancion: %s,
-        Artista: %s,
+        Name: %s
+        Artista: %s
         Duracion: %s
-        """, getTitle(), getArtist(), getDurationSeconds());
+        """, getName(), getArtist(), getDurationSeconds());
   }
 
   @Override
   public void play() {
-    System.out.println("Reproduciendo la canción: " + getTitle() + " del artista: " + getArtist());
+    System.out.println("Reproduciendo la canción: " + getName() + " del artista: " + getArtist());
   }
 
   @Override
   public void stop() {
-    System.out.println("Deteniendo la canción: " + getTitle());
+    System.out.println("Deteniendo la canción: " + getName());
   }
 
 }

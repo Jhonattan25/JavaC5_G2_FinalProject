@@ -1,31 +1,31 @@
 package model;
 
 public abstract class Multimedia {
-  private String title;
+  private String name;
   private int durationSeconds;
 
-  public Multimedia(String title, int durationSeconds) {
-    this.title = title;
+  public Multimedia(String name, int durationSeconds) {
+    this.name = name;
     this.durationSeconds = durationSeconds;
   }
 
   public Multimedia() {
-    this.title = "Desconocido";
+    this.name = "Desconocido";
     this.durationSeconds = 0;
   }
 
-  public Multimedia(String title) {
-    this.title = title;
+  public Multimedia(String name) {
+    this.name = name;
     this.durationSeconds = 0;
   }
 
   // getters and setters
-  public String getTitle() {
-    return title;
+  public String getName() {
+    return name;
   }
 
-  public void setTitle(String title) {
-    this.title = title;
+  public void setName(String name) {
+    this.name = name;
   }
 
   public int getDurationSeconds() {

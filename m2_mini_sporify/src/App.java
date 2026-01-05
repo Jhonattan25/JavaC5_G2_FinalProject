@@ -54,8 +54,8 @@ public class App {
     scanner.close();
   }
 
-  public static Song createSong(String title, String artist, int durationSeconds) {
-    return new Song(title, artist, durationSeconds);
+  public static Song createSong(String name, String artist, int durationSeconds) {
+    return new Song(name, artist, durationSeconds);
   }
 
   public static MusicLibrary createMusicLibrary() {
@@ -92,15 +92,19 @@ public class App {
   }
 
   public static void login(SporifyAccount sporifyAccount) {
-    System.out.print("Ingrese su usuario: ");
-    String user = scanner.nextLine();
-
-    System.out.print("Ingrese su contraseña: ");
-    String password = scanner.nextLine();
-    System.out.println();
+    String user = requestUser();
+    String password = requestPassword();
 
     sporifyAccount.login(user, password);
-    System.out.println();
+  }
+
+  public static boolean validateSession(SporifyAccount sporifyAccount) {
+    if (sporifyAccount.isSessionActive()) {
+      return true;
+    } else {
+      System.out.println("Debe iniciar sesión para realizar esta acción.");
+      return false;
+    }
   }
 
   public static void musicLibraryManagement(SporifyAccount sporifyAccount) {
@@ -156,39 +160,23 @@ public class App {
 
   public static void addSongToMusicLibrary(MusicLibrary musicLibrary) {
 
-    System.out.print("Ingrese el titulo: ");
-    String title = scanner.nextLine();
+    String name = requestSongName();
+    String artist = requestArtist();
+    int durationSeconds = requestDurationSeconds();
 
-    System.out.print("Ingrese el artista: ");
-    String artist = scanner.nextLine();
-
-    System.out.print("Ingrese la duración en segundos: ");
-    int durationSeconds = scanner.nextInt();
-    scanner.nextLine();
-
-    Song newSong = createSong(title, artist, durationSeconds);
-
+    Song newSong = createSong(name, artist, durationSeconds);
     musicLibrary.addSong(newSong);
     System.out.println("Canción agregada exitosamente.");
   }
 
-  public static boolean validateSession(SporifyAccount sporifyAccount) {
-    if (sporifyAccount.isSessionActive()) {
-      return true;
-    } else {
-      System.out.println("Debe iniciar sesión para realizar esta acción.");
-      return false;
-    }
-  }
-
   public static void searchSongMusicLibraryByName(MusicLibrary musicLibrary) {
-    System.out.print("Ingrese el nombre de la canción a buscar: ");
-    String name = scanner.nextLine();
+    
+    String name = requestSongName();
 
-    Song foundSong = musicLibrary.searchSongByName(name);
+    Song song = musicLibrary.searchSongByName(name);
 
-    if (foundSong != null) {
-      System.out.println(foundSong.getInfo());
+    if (song != null) {
+      System.out.println(song.getInfo());
     }
   }
 
@@ -243,12 +231,9 @@ public class App {
   }
 
   public static void createPlaylist(SporifyAccount sporifyAccount) {
-
-    System.out.print("Ingrese el nombre de la playlist a crear: ");
-    String name = scanner.nextLine();
+    String name = requestPlaylistName();
 
     Playlist newPlaylist = new Playlist(name, 200);
-
     sporifyAccount.addPlaylist(newPlaylist);
   }
 
@@ -259,23 +244,17 @@ public class App {
   }
 
   public static void addSongToPlaylist(SporifyAccount sporifyAccount) {
-    System.out.print("Ingrese el nombre de la canción que va agregar: ");
-    String songName = scanner.nextLine();
-
+    String songName = requestSongName();
     Song song = sporifyAccount.getMusicLibrary().searchSongByName(songName);
 
     if (song != null) {
-      System.out.print("Ingrese el nombre de la playlist en la que desea agregar la canción: ");
-      String playlistName = scanner.nextLine();
-
+      String playlistName = requestPlaylistName();
       sporifyAccount.addSongToPlaylist(playlistName, song);
     }
   }
 
   public static void showSongsByPlaylist(SporifyAccount sporifyAccount) {
-    System.out.print("Ingrese el nombre de la playlist a la que desea verle las canciones: ");
-    String playlistName = scanner.nextLine();
-
+    String playlistName = requestPlaylistName();
     Playlist playlist = sporifyAccount.searchPlaylistByName(playlistName);
 
     if (playlist != null) {
@@ -329,23 +308,15 @@ public class App {
   }
 
   public static void playSongByPlaylist(SporifyAccount sporifyAccount) {
-    System.out.print("Ingrese el nombre de la playlist en la que esta la canción: ");
-    String playlistName = scanner.nextLine();
-
-    System.out.print("Ingrese el indice de la canción a reproducir: ");
-    int songIndex = scanner.nextInt();
-    scanner.nextLine();
+    String playlistName = requestPlaylistName();
+    int songIndex = requestSongIndex();
 
     sporifyAccount.playSong(playlistName, songIndex - 1);
   }
 
   public static void stopSongByPlaylist(SporifyAccount sporifyAccount) {
-    System.out.print("Ingrese el nombre de la playlist en la que esta la canción: ");
-    String playlistName = scanner.nextLine();
-
-    System.out.print("Ingrese el indice de la canción a detener: ");
-    int songIndex = scanner.nextInt();
-    scanner.nextLine();
+    String playlistName = requestPlaylistName();
+    int songIndex = requestSongIndex();
 
     sporifyAccount.stopSong(playlistName, songIndex - 1);
   }
@@ -353,4 +324,137 @@ public class App {
   public static void logOut(SporifyAccount sporifyAccount) {
     sporifyAccount.logOut();
   }
+
+  // === Request Validations ===
+  public static String requestUser() {
+    String user;
+    boolean validUser = false;
+
+    do {
+      System.out.print("Ingrese su usuario: ");
+      user = scanner.nextLine();
+      validUser = isValidString(user);
+
+      if (!validUser) {
+        System.out.println("Usuario invalido. No debe estar vacio o contener solo espacios");
+      }
+    } while (!validUser);
+
+    return user;
+  }
+
+  public static String requestPassword() {
+    String password;
+    boolean validPassword = false;
+
+    do {
+      System.out.print("Ingrese su contraseña: ");
+      password = scanner.nextLine();
+      validPassword = isValidString(password);
+
+      if (!validPassword) {
+        System.out.println("Contraseña invalida. No debe estar vacio o contener solo espacios");
+      }
+    } while (!validPassword);
+
+    return password;
+  }
+
+  public static String requestSongName() {
+    String name;
+    boolean validName = false;
+
+    do {
+      System.out.print("Ingrese el nombre de la canción: ");
+      name = scanner.nextLine();
+      validName = isValidString(name);
+
+      if (!validName) {
+        System.out.println("Nombre invalido. No debe estar vacio o contener solo espacios");
+      }
+    } while (!validName);
+
+    return name;
+  }
+
+  public static String requestArtist() {
+    String artist;
+    boolean validArtist = false;
+
+    do {
+      System.out.print("Ingrese el artista: ");
+      artist = scanner.nextLine();
+      validArtist = isValidString(artist);
+
+      if (!validArtist) {
+        System.out.println("Artista invalido. No debe estar vacio o contener solo espacios");
+      }
+    } while (!validArtist);
+
+    return artist;
+  }
+
+  public static int requestDurationSeconds() {
+    int durationSeconds;
+    boolean validDurationSeconds = false;
+
+    do {
+      System.out.print("Ingrese la duración en segundos: ");
+      durationSeconds = scanner.nextInt();
+
+      validDurationSeconds = isValidInt(durationSeconds);
+
+      if (!validDurationSeconds) {
+        System.out.println("Duración invalida. Debe ser mayor a 0");
+      }
+    } while (!validDurationSeconds);
+    scanner.nextLine();
+
+    return durationSeconds;
+  }
+
+  public static int requestSongIndex() {
+    int index;
+    boolean validIndex = false;
+
+    do {
+      System.out.print("Ingrese el indice de la canción: ");
+      index = scanner.nextInt();
+
+      validIndex = isValidInt(index);
+
+      if (!validIndex) {
+        System.out.println("Duración invalida. Debe ser mayor a 0");
+      }
+    } while (!validIndex);
+    scanner.nextLine();
+
+    return index;
+  }
+
+  public static String requestPlaylistName() {
+    String name;
+    boolean validName = false;
+
+    do {
+      System.out.print("Ingrese el nombre de la playlist: ");
+      name = scanner.nextLine();
+      validName = isValidString(name);
+
+      if (!validName) {
+        System.out.println("Nombre invalido. No debe estar vacio o contener solo espacios");
+      }
+    } while (!validName);
+
+    return name;
+  }
+
+  public static boolean isValidString(String input) {
+    return !input.isBlank();
+  }
+
+  static boolean isValidInt(int input) {
+    return input >= 0;
+  }
+
 }

@@ -29,7 +29,7 @@ public class Playlist {
 
   public void listSongs() {
     for (int i = 0; i < songsCounter; i++) {
-      System.out.println((i + 1) + ". " + songs[i].getTitle() + " - " + songs[i].getArtist());
+      System.out.println((i + 1) + ". " + songs[i].getName() + " - " + songs[i].getArtist());
     }
   }
 
