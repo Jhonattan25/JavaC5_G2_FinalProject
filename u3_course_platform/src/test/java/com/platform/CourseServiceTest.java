@@ -44,7 +44,6 @@ public class CourseServiceTest {
     try {
       courseService.searchCourseByCode("HIST101");
     } catch (Exception e) {
-
       assertThrows(CourseNotFoundException.class, () -> courseService.searchCourseByCode("HIST101"));
       assertEquals("Curso con código HIST101 no fue encontrado", e.getMessage());
     }

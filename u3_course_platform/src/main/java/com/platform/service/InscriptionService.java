@@ -38,7 +38,7 @@ public class InscriptionService {
     return inscriptions;
   }
 
-  public List<Inscription> geInscriptionsByEstiudent(Estudent estudent) throws EstudentNotFoundException {
+  public List<Inscription> geInscriptionsByEstudent(Estudent estudent) throws EstudentNotFoundException {
     List<Inscription> result = new ArrayList<>();
     for (Inscription inscription : inscriptions) {
       if (inscription.getEstudent().getId().equals(estudent.getId())) {
