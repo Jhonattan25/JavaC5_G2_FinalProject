@@ -1,4 +1,4 @@
-package com.devsenior.service;
+package com.devsenior.repository;
 
 import java.util.ArrayList;
 import java.util.List;
